@@ -2,12 +2,38 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../config";
 import Input from "./Input";
+import { useNavigate } from "react-router-dom";
 
 const Shortner = () => {
     const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
     const fullUrlRef = useRef<HTMLInputElement>(null);
     const customAliasRef = useRef<HTMLInputElement>(null);
     const topicRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+
+    // Authentication check
+    const checkAuth = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
+            if (response.data.authenticated) {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+                navigate('/');  // Redirect to login if not authenticated
+            }
+        } catch (e) {
+            setIsAuthenticated(false);
+            navigate('/');  // Redirect to login if there's an error with the request
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        checkAuth();
+    }, []);
 
     const getShortInfos = async () => {
         try {
@@ -19,8 +45,10 @@ const Shortner = () => {
     }
 
     useEffect(() => {
-        getShortInfos();
-    }, []);
+        if (isAuthenticated) {
+            getShortInfos();
+        }
+    }, [isAuthenticated]);
 
     const createShortner = async () => {
         try {
@@ -32,14 +60,17 @@ const Shortner = () => {
                 fullUrl,
                 customAlias,
                 topic
-            }, { withCredentials: true })
+            }, { withCredentials: true });
 
-            getShortInfos();
+            getShortInfos(); // Fetch updated short URLs
         } catch (e) {
             console.log(e);
         }
     }
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">
@@ -65,7 +96,7 @@ const Shortner = () => {
                         {shortUrlInfo.map((info: any, index: number) => (
                             <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                                 <td className="px-6 py-3 text-blue-600 break-all">
-                                    <a href={info.shortUrl} target="_blank">
+                                    <a href={info.shortUrl} target="_blank" rel="noopener noreferrer">
                                         {info.shortUrl}
                                     </a>
                                 </td>
@@ -76,10 +107,8 @@ const Shortner = () => {
                     </tbody>
                 </table>
             </div>
-
         </div>
-
     )
 }
 
-export default Shortner
+export default Shortner;

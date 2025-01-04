@@ -11,17 +11,23 @@ function App() {
   const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<any>(null);  // State to hold user info
+
+
     useEffect(() => {
       const authCheck = async () => {
         try {
           const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
           if (response.data.authenticated) {
             setIsAuthenticated(true);
+            setUser(response.data.user);
           } else {
             setIsAuthenticated(false);
+            setUser(null);
           }
         } catch (e) {
           setIsAuthenticated(false);
+          setUser(null);
         } finally {
           setLoading(false);
         }
@@ -35,7 +41,13 @@ function App() {
       return <div>Loading...</div>;
     }
 
-    return isAuthenticated ? element : <Navigate to="/" replace />;
+    return isAuthenticated ? (
+      <>
+        {element}
+      </>
+    ) : (
+      <Navigate to="/" replace />
+    );
   };
 
   return (
