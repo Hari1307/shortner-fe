@@ -13,26 +13,29 @@ const Shortner = () => {
     const topicRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
-    const checkAuth = useCallback(async () => {
+    const checkAuth = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
             if (response.data.authenticated) {
                 setIsAuthenticated(true);
+                getShortInfos(); // Fetch short URLs if authenticated
             } else {
                 setIsAuthenticated(false);
                 navigate('/');
             }
         } catch (e) {
+            console.error("Authentication check failed:", e);
             setIsAuthenticated(false);
-            navigate('/');  // Redirect to login if there's an error with the request
+            navigate('/');
         } finally {
             setLoading(false);
         }
-    }, [navigate]);
+    };
 
     useEffect(() => {
         checkAuth();
-    }, [checkAuth]);
+    }, []);
+
 
     const getShortInfos = async () => {
         try {
@@ -43,11 +46,11 @@ const Shortner = () => {
         }
     }
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            getShortInfos();
-        }
-    }, [isAuthenticated]);
+    // useEffect(() => {
+    //     if (isAuthenticated) {
+    //         getShortInfos();
+    //     }
+    // }, [isAuthenticated]);
 
     const createShortner = async () => {
         try {
