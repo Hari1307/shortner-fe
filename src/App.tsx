@@ -8,7 +8,7 @@ import { BACKEND_URL } from './config'
 
 function App() {
 
-  const ProtectedRoute = ({ element }: any) => {
+  const ProtectedRoute = ({ element }: {element:JSX.Element}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -32,7 +32,7 @@ function App() {
       return <div>Loading...</div>;
     }
 
-    return isAuthenticated ? element : <Navigate to="/" />;
+    return isAuthenticated ? element : <Navigate to="/" replace />;
   };
 
   return (
