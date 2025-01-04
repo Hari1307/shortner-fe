@@ -8,15 +8,18 @@ import { BACKEND_URL } from './config'
 
 function App() {
 
-  const ProtectedRoute = ({ element }: {element:JSX.Element}) => {
+  const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
       const authCheck = async () => {
         try {
-          await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
-          
-          setIsAuthenticated(true);
+          const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
+          if (response.data.authenticated) {
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
         } catch (e) {
           setIsAuthenticated(false);
         } finally {
