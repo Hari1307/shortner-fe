@@ -43,6 +43,7 @@ function App() {
 
     return isAuthenticated ? (
       <>
+        <h1>{user}</h1>
         {element}
       </>
     ) : (
