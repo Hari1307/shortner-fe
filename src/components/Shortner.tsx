@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { BACKEND_URL } from "../config";
 import Input from "./Input";
 import { useNavigate } from "react-router-dom";
@@ -13,15 +13,14 @@ const Shortner = () => {
     const topicRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
-    // Authentication check
-    const checkAuth = async () => {
+    const checkAuth = useCallback(async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
             if (response.data.authenticated) {
                 setIsAuthenticated(true);
             } else {
                 setIsAuthenticated(false);
-                navigate('/');  // Redirect to login if not authenticated
+                navigate('/');
             }
         } catch (e) {
             setIsAuthenticated(false);
@@ -29,18 +28,18 @@ const Shortner = () => {
         } finally {
             setLoading(false);
         }
-    }
+    }, [navigate]);
 
     useEffect(() => {
         checkAuth();
-    }, []);
+    }, [checkAuth]);
 
     const getShortInfos = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/api/shorten`, { withCredentials: true });
             setShortUrlInfo(response.data);
         } catch (e) {
-            console.log(e);
+            console.error("Failed to fetch short URLs:", e);
         }
     }
 
@@ -64,9 +63,9 @@ const Shortner = () => {
 
             getShortInfos(); // Fetch updated short URLs
         } catch (e) {
-            console.log(e);
+            console.error("Failed to create short URL:", e);
         }
-    }
+    };
 
     if (loading) {
         return <div>Loading...</div>;
