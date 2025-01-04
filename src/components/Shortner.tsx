@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../config";
 import Input from "./Input";
-import { useNavigate } from "react-router-dom";
 
 const Shortner = () => {
     const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
@@ -22,23 +21,6 @@ const Shortner = () => {
     useEffect(() => {
         getShortInfos();
     }, []);
-
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate();
-    const isAuthenticated = async () => {
-        await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true })          
-        .then((response) => setUser(response.data))
-        .catch(() => navigate('/'));
-    }
-
-    useEffect(() => {
-        isAuthenticated();
-    }, [navigate]);
-
-
-    if (!user) {
-        return <div>Loading...</div>;
-    }
 
     const createShortner = async () => {
         try {
