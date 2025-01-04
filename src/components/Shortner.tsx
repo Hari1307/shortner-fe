@@ -6,52 +6,72 @@ import { useNavigate } from "react-router-dom";
 
 const Shortner = () => {
     const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true);
+    // const [isAuthenticated, setIsAuthenticated] = useState(false);
+    // const [loading, setLoading] = useState(true);
     const fullUrlRef = useRef<HTMLInputElement>(null);
     const customAliasRef = useRef<HTMLInputElement>(null);
     const topicRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
-    const checkAuth = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
-            if (response.data.authenticated) {
-                setIsAuthenticated(true);
-                getShortInfos(); // Fetch short URLs if authenticated
-            } else {
-                setIsAuthenticated(false);
-                navigate('/');
-            }
-        } catch (e) {
-            console.error("Authentication check failed:", e);
-            setIsAuthenticated(false);
-            navigate('/');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        checkAuth();
-    }, []);
-
-
-    const getShortInfos = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/api/shorten`, { withCredentials: true });
-            setShortUrlInfo(response.data);
-        } catch (e) {
-            console.error("Failed to fetch short URLs:", e);
-        }
-    }
+    // const checkAuth = async () => {
+    //     try {
+    //         const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
+    //         if (response.data.authenticated) {
+    //             setIsAuthenticated(true);
+    //             getShortInfos(); // Fetch short URLs if authenticated
+    //         } else {
+    //             setIsAuthenticated(false);
+    //             navigate('/');
+    //         }
+    //     } catch (e) {
+    //         console.error("Authentication check failed:", e);
+    //         setIsAuthenticated(false);
+    //         navigate('/');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     // useEffect(() => {
-    //     if (isAuthenticated) {
-    //         getShortInfos();
-    //     }
-    // }, [isAuthenticated]);
+    //     checkAuth();
+    // }, []);
 
+
+    // const getShortInfos = async () => {
+    //     try {
+    //         const response = await axios.get(`${BACKEND_URL}/api/shorten`, { withCredentials: true });
+    //         setShortUrlInfo(response.data);
+    //     } catch (e) {
+    //         console.error("Failed to fetch short URLs:", e);
+    //     }
+    // }
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await axios.get('/api/checkAuth');
+                if (response.data.authenticated) {
+                    getShortInfos(); // Fetch short URLs if authenticated
+                } else {
+                    navigate('/');
+                }
+            } catch (e) {
+                console.error("Authentication check failed:", e);
+                navigate('/');
+            }
+        };
+
+        const getShortInfos = async () => {
+            try {
+                const response = await axios.get('/api/shortUrls');
+                setShortUrlInfo(response.data);
+            } catch (error) {
+                console.error("Error fetching short URLs:", error);
+            }
+        };
+
+        checkAuth();
+    }, [navigate]);
     const createShortner = async () => {
         try {
             const fullUrl = fullUrlRef.current?.value;
