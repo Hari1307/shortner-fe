@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../config";
 import Input from "./Input";
-import { useNavigate } from "react-router-dom";
 
 const Shortner = () => {
     const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
@@ -46,6 +46,14 @@ const Shortner = () => {
     //     }
     // }
 
+    const getShortInfos = async () => {
+        try {
+            const response = await axios.get('/api/shortUrls');
+            setShortUrlInfo(response.data);
+        } catch (error) {
+            console.error("Error fetching short URLs:", error);
+        }
+    };
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -60,18 +68,9 @@ const Shortner = () => {
                 navigate('/');
             }
         };
-
-        const getShortInfos = async () => {
-            try {
-                const response = await axios.get('/api/shortUrls');
-                setShortUrlInfo(response.data);
-            } catch (error) {
-                console.error("Error fetching short URLs:", error);
-            }
-        };
-
         checkAuth();
     }, [navigate]);
+
     const createShortner = async () => {
         try {
             const fullUrl = fullUrlRef.current?.value;
@@ -90,9 +89,9 @@ const Shortner = () => {
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //     return <div>Loading...</div>;
+    // }
 
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">
