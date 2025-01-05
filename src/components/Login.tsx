@@ -3,7 +3,7 @@ import { BACKEND_URL } from "../config";
 
 const Login = () => {
     const handleGoogleLogin = () => {
-        window.location.href = `${BACKEND_URL}/auth/google`;
+        window.open(`${BACKEND_URL}/auth/google`, "_self");
     }
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">

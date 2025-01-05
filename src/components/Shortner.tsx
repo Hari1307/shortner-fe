@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 import { BACKEND_URL } from "../config";
 import Input from "./Input";
 
@@ -11,65 +10,15 @@ const Shortner = () => {
     const fullUrlRef = useRef<HTMLInputElement>(null);
     const customAliasRef = useRef<HTMLInputElement>(null);
     const topicRef = useRef<HTMLInputElement>(null);
-    const navigate = useNavigate();
-
-    // const checkAuth = async () => {
-    //     try {
-    //         const response = await axios.get(`${BACKEND_URL}/api/home`, { withCredentials: true });
-    //         if (response.data.authenticated) {
-    //             setIsAuthenticated(true);
-    //             getShortInfos(); // Fetch short URLs if authenticated
-    //         } else {
-    //             setIsAuthenticated(false);
-    //             navigate('/');
-    //         }
-    //     } catch (e) {
-    //         console.error("Authentication check failed:", e);
-    //         setIsAuthenticated(false);
-    //         navigate('/');
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     checkAuth();
-    // }, []);
-
-
-    // const getShortInfos = async () => {
-    //     try {
-    //         const response = await axios.get(`${BACKEND_URL}/api/shorten`, { withCredentials: true });
-    //         setShortUrlInfo(response.data);
-    //     } catch (e) {
-    //         console.error("Failed to fetch short URLs:", e);
-    //     }
-    // }
 
     const getShortInfos = async () => {
         try {
-            const response = await axios.get('/api/shortUrls');
+            const response = await axios.get('/api/shortUrls', { withCredentials: true });
             setShortUrlInfo(response.data);
         } catch (error) {
             console.error("Error fetching short URLs:", error);
         }
     };
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const response = await axios.get('/api/checkAuth');
-                if (response.data.authenticated) {
-                    getShortInfos(); // Fetch short URLs if authenticated
-                } else {
-                    navigate('/');
-                }
-            } catch (e) {
-                console.error("Authentication check failed:", e);
-                navigate('/');
-            }
-        };
-        checkAuth();
-    }, [navigate]);
 
     const createShortner = async () => {
         try {
@@ -83,15 +32,11 @@ const Shortner = () => {
                 topic
             }, { withCredentials: true });
 
-            getShortInfos(); // Fetch updated short URLs
+            getShortInfos();
         } catch (e) {
             console.error("Failed to create short URL:", e);
         }
     };
-
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
 
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">
