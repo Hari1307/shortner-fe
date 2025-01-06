@@ -1,9 +1,9 @@
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Login from './components/Login'
 import Shortner from './components/Shortner'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { BACKEND_URL } from './config'
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route path='/home' element={user ? <Navigate to="/home" /> : <Login />} />
+        <Route path='/home' element={user ? <Shortner/> : <Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   )
