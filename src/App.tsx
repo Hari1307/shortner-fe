@@ -29,7 +29,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route path='/home' element={user ? <Navigate to="/" /> : <Shortner />} />
+        <Route path='/home' element={user ? <Navigate to="/home" /> : <Login />} />
       </Routes>
     </BrowserRouter>
   )
