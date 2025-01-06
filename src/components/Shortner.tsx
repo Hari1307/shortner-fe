@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../config";
 import Input from "./Input";
 
@@ -37,6 +37,10 @@ const Shortner = () => {
             console.error("Failed to create short URL:", e);
         }
     };
+
+    useEffect(() => {
+        getShortInfos();
+    }, []);
 
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">
