@@ -7,7 +7,7 @@ import Shortner from './components/Shortner'
 import { BACKEND_URL } from './config'
 
 function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const validUser = async () => {
@@ -15,7 +15,7 @@ function App() {
         const response = await axios.get(`${BACKEND_URL}/login/success`, { withCredentials: true })
         if (response.status === 200) {
           setUser(response.data.user);
-          return response.data.json();
+          // return response.data.json();
         } else {
           throw new Error("Authentication failed");
         }
