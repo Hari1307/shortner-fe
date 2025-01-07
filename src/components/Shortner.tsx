@@ -26,7 +26,7 @@ const Shortner = () => {
                 const result = await res.data.json();
                 if (result.authenticated) {
                     console.log("inside authenticated api")
-                    setUser(result.user);
+                    setUser(result);
                 } else {
                     window.location.href = "/";
                 }
@@ -57,7 +57,7 @@ const Shortner = () => {
 
     if (loading) return <div className="text-center">Loading...</div>;
 
-    
+
     // const getShortInfos = async () => {
     //     try {
     //         const response = await axios.get(`${BACKEND_URL}/api/shortUrls`, { withCredentials: true });
@@ -98,7 +98,7 @@ const Shortner = () => {
 
                 <button className="p-7 m-3 rounded-md w-96 bg-slate-200" onClick={createShortner}>Create ShortURL</button>
             </div>
-            <h1>{ user.name}</h1>
+            <h1>{user}</h1>
             {/* {JSON.stringify(shortUrlInfo)} */}
             <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full bg-white border border-gray-200 shadow-md">
