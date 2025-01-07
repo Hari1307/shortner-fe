@@ -4,21 +4,68 @@ import { BACKEND_URL } from "../config";
 import Input from "./Input";
 
 const Shortner = () => {
-    const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
+    // const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
     // const [isAuthenticated, setIsAuthenticated] = useState(false);
     // const [loading, setLoading] = useState(true);
     const fullUrlRef = useRef<HTMLInputElement>(null);
     const customAliasRef = useRef<HTMLInputElement>(null);
     const topicRef = useRef<HTMLInputElement>(null);
 
-    const getShortInfos = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/api/shortUrls`, { withCredentials: true });
-            setShortUrlInfo(response.data);
-        } catch (error) {
-            console.error("Error fetching short URLs:", error);
-        }
-    };
+
+    const [user, setUser] = useState(null);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Verify if the user is authenticated
+        const fetchUser = async () => {
+            try {
+                const res = await axios.get(`${BACKEND_URL}/api/home`, {
+                    withCredentials: true,
+                });
+                const result = await res.data.json();
+                if (result.authenticated) {
+                    console.log("inside authenticated api")
+                    setUser(result.user);
+                } else {
+                    window.location.href = "/";
+                }
+            } catch (err) {
+                console.error(err);
+                window.location.href = "/";
+            }
+        };
+
+        const fetchContent = async () => {
+            try {
+                const res = await axios.get(`${BACKEND_URL}/api/shorten`, {
+                    withCredentials: true,
+                });
+                const result = await res.data.json();
+                console.log("fetched data")
+                setData(result);
+                console.log("fetched data"+result)
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUser().then(fetchContent);
+    }, []);
+
+    if (loading) return <div className="text-center">Loading...</div>;
+
+    
+    // const getShortInfos = async () => {
+    //     try {
+    //         const response = await axios.get(`${BACKEND_URL}/api/shortUrls`, { withCredentials: true });
+    //         setShortUrlInfo(response.data);
+    //     } catch (error) {
+    //         console.error("Error fetching short URLs:", error);
+    //     }
+    // };
 
     const createShortner = async () => {
         try {
@@ -32,15 +79,15 @@ const Shortner = () => {
                 topic
             }, { withCredentials: true });
 
-            getShortInfos();
+            // getShortInfos();
         } catch (e) {
             console.error("Failed to create short URL:", e);
         }
     };
 
-    useEffect(() => {
-        getShortInfos();
-    }, []);
+    // useEffect(() => {
+    //     getShortInfos();
+    // }, []);
 
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">
@@ -51,8 +98,8 @@ const Shortner = () => {
 
                 <button className="p-7 m-3 rounded-md w-96 bg-slate-200" onClick={createShortner}>Create ShortURL</button>
             </div>
-
-            {JSON.stringify(shortUrlInfo)}
+            <h1>{ user.name}</h1>
+            {/* {JSON.stringify(shortUrlInfo)} */}
             <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full bg-white border border-gray-200 shadow-md">
                     <thead className="bg-gray-200">
@@ -63,7 +110,7 @@ const Shortner = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {shortUrlInfo.map((info: any, index: number) => (
+                        {data.map((info: any, index: number) => (
                             <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                                 <td className="px-6 py-3 text-blue-600 break-all">
                                     <a href={info.shortUrl} target="_blank" rel="noopener noreferrer">
