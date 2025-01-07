@@ -1,11 +1,11 @@
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import { BACKEND_URL } from '../config'
-import { useCookies } from 'react-cookie'
-import axios from 'axios'
 
 const Login = () => {
   const navigate = useNavigate()
-  const [cookie, setCookie, removeCookie] = useCookies(['userSession'])
+  const [cookie, setCookie] = useCookies(['userSession'])
 
   const handleGoogleLogin = async () => {
     try {
@@ -15,6 +15,7 @@ const Login = () => {
           path: '/',
           httpOnly: true
         })
+          console.log(cookie)
         navigate('/home')
       } else {
         console.error('Login failed:', response.data.error)

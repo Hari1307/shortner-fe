@@ -15,7 +15,7 @@ const Shortner = () => {
 
 
 const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(['userSession']);
+  const [cookies,setCookie, removeCookie] = useCookies(['userSession']);
   const [shortUrls, setShortUrls] = useState([]);
 
   useEffect(() => {
@@ -29,8 +29,10 @@ const navigate = useNavigate();
           }); 
           setShortUrls(response.data);
         } catch (error:any) {
-          if (error.response && error.response.status === 401) {
-            removeCookie('userSession'); // Remove cookie if unauthorized
+            if (error.response && error.response.status === 401) {
+                
+                removeCookie('userSession'); // Remove cookie if unauthorized
+                console.log(setCookie)
             navigate('/login'); 
           } else {
             console.error('Error fetching short URLs:', error);
@@ -71,10 +73,6 @@ const navigate = useNavigate();
         }
     };
 
-    // useEffect(() => {
-    //     getShortInfos();
-    // }, []);
-
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">
             <div className="flex flex-col justify-center items-center p-10 bg-slate-400 rounded-lg">
@@ -84,8 +82,6 @@ const navigate = useNavigate();
 
                 <button className="p-7 m-3 rounded-md w-96 bg-slate-200" onClick={createShortner}>Create ShortURL</button>
             </div>
-            {/* <h1>{user}</h1> */}
-            {/* {JSON.stringify(shortUrlInfo)} */}
             <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full bg-white border border-gray-200 shadow-md">
                     <thead className="bg-gray-200">
