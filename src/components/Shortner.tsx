@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../config";
 import Input from "./Input";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const Shortner = () => {
     // const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
@@ -12,52 +14,36 @@ const Shortner = () => {
     const topicRef = useRef<HTMLInputElement>(null);
 
 
-    const [user, setUser] = useState(null);
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(['userSession']);
+  const [shortUrls, setShortUrls] = useState([]);
 
-    useEffect(() => {
-        // Verify if the user is authenticated
-        const fetchUser = async () => {
-            try {
-                const res = await axios.get(`${BACKEND_URL}/api/home`, {
-                    withCredentials: true,
-                });
-                const result = await res.data.json();
-                if (result.authenticated) {
-                    console.log("inside authenticated api")
-                    setUser(result);
-                } else {
-                    window.location.href = "/";
-                }
-            } catch (err) {
-                console.error(err);
-                window.location.href = "/";
-            }
-        };
+  useEffect(() => {
+    const fetchShortUrls = async () => {
+      if (cookies.userSession) {
+        try {
+          const response = await axios.get(`${BACKEND_URL}/api/shorten`, {
+            headers: { 
+              Authorization: `Bearer ${cookies.userSession.token}` 
+            } 
+          }); 
+          setShortUrls(response.data);
+        } catch (error:any) {
+          if (error.response && error.response.status === 401) {
+            removeCookie('userSession'); // Remove cookie if unauthorized
+            navigate('/login'); 
+          } else {
+            console.error('Error fetching short URLs:', error);
+          }
+        }
+      } else {
+        navigate('/'); 
+      }
+    };
 
-        const fetchContent = async () => {
-            try {
-                const res = await axios.get(`${BACKEND_URL}/api/shorten`, {
-                    withCredentials: true,
-                });
-                const result = await res.data.json();
-                console.log("fetched data")
-                setData(result);
-                console.log("fetched data"+result)
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUser().then(fetchContent);
-    }, []);
-
-    if (loading) return <div className="text-center">Loading...</div>;
-
-
+    fetchShortUrls();
+  }, [cookies, navigate]);
+    
     // const getShortInfos = async () => {
     //     try {
     //         const response = await axios.get(`${BACKEND_URL}/api/shortUrls`, { withCredentials: true });
@@ -98,7 +84,7 @@ const Shortner = () => {
 
                 <button className="p-7 m-3 rounded-md w-96 bg-slate-200" onClick={createShortner}>Create ShortURL</button>
             </div>
-            <h1>{user}</h1>
+            {/* <h1>{user}</h1> */}
             {/* {JSON.stringify(shortUrlInfo)} */}
             <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full bg-white border border-gray-200 shadow-md">
@@ -110,7 +96,7 @@ const Shortner = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((info: any, index: number) => (
+                        {shortUrls.map((info: any, index: number) => (
                             <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
                                 <td className="px-6 py-3 text-blue-600 break-all">
                                     <a href={info.shortUrl} target="_blank" rel="noopener noreferrer">
