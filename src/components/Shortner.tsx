@@ -47,7 +47,7 @@ const Shortner = () => {
     
     const getShortInfos = async () => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/api/shortUrls`, { withCredentials: true });
+            const response = await axios.get(`${BACKEND_URL}/api/shorten`, { withCredentials: true });
             setShortUrlInfo(response.data);
         } catch (error) {
             console.error("Error fetching short URLs:", error);
