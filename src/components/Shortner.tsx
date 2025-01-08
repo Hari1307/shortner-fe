@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../config";
 import Input from "./Input";
 
 
-const Shortner = ({user: any}) => {
+const Shortner = ({user}) => {
     const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
     // const [isAuthenticated, setIsAuthenticated] = useState(false);
     // const [loading, setLoading] = useState(true);

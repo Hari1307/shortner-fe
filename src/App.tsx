@@ -1,9 +1,8 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Login from './components/Login'
 import Shortner from './components/Shortner'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { BACKEND_URL } from './config'
 
 function App() {

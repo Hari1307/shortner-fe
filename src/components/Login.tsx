@@ -1,7 +1,7 @@
 import { BACKEND_URL } from '../config'
 
 const Login = () => {
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     window.location.href = BACKEND_URL + "/auth/google";
   }
   return (
