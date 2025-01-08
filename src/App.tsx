@@ -12,7 +12,7 @@ function App() {
       .then((res) => {
           setUser(res.data)
       })
-  })
+  },[])
 
   return (
     // <BrowserRouter>
@@ -22,7 +22,7 @@ function App() {
     //   </Routes>
     // </BrowserRouter>
     <div>
-      {user ? (<Shortner user={user} />) : <Login />}
+      {user ? (<Shortner user={ user} />) : <Login />}
     </div>
   )
 }
