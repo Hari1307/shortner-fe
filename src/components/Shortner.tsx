@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { BACKEND_URL } from "../config";
 import Input from "./Input";
 
 
@@ -10,49 +9,16 @@ const Shortner = () => {
     const customAliasRef = useRef<HTMLInputElement>(null);
     const topicRef = useRef<HTMLInputElement>(null);
 
-
-// const navigate = useNavigate();
-//   const [cookies,setCookie, removeCookie] = useCookies(['userSession']);
-//   const [shortUrls, setShortUrls] = useState([]);
-
-//   useEffect(() => {
-//     const fetchShortUrls = async () => {
-//       if (cookies.userSession) {
-//         try {
-//           const response = await axios.get(`${BACKEND_URL}/api/shorten`, {
-//             headers: { 
-//               Authorization: `Bearer ${cookies.userSession.token}` 
-//             } 
-//           }); 
-//           setShortUrls(response.data);
-//         } catch (error:any) {
-//             if (error.response && error.response.status === 401) {
-                
-//                 removeCookie('userSession'); // Remove cookie if unauthorized
-//                 console.log(setCookie)
-//             navigate('/login'); 
-//           } else {
-//             console.error('Error fetching short URLs:', error);
-//           }
-//         }
-//       } else {
-//         navigate('/'); 
-//       }
-//     };
-
-//     fetchShortUrls();
-//   }, [cookies, navigate]);
-    
     const getShortInfos = async () => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/api/shorten`, { withCredentials: true });
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, { withCredentials: true });
             setShortUrlInfo(response.data);
         } catch (error) {
             console.error("Error fetching short URLs:", error);
         }
     };
 
-    const createShortner = async () => {
+  const createShortner = async () => {
         try {
             const fullUrl = fullUrlRef.current?.value;
             const customAlias = customAliasRef.current?.value;
@@ -62,9 +28,9 @@ const Shortner = () => {
               customAlias,
               topic
             }
-            await axios.post(`${BACKEND_URL}/api/shorten`, body, { withCredentials: true });
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body, { withCredentials: true });
 
-            console.log("fe request completed");
+            // console.log("fe request completed");
             getShortInfos();
         } catch (e) {
             console.error("Failed to create short URL:", e);
