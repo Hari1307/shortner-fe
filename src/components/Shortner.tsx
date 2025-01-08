@@ -105,7 +105,7 @@ const Shortner = () => {
                                     </a>
                                 </td>
                                 <td className="px-6 py-3">{new Date(info.createdAt).toLocaleString()}</td>
-                                <td className="px-6 py-3">{info.clicks}</td>
+                                {/* <td className="px-6 py-3">{info.clicks}</td> */}
                             </tr>
                         ))}
                     </tbody>
