@@ -28,8 +28,7 @@ const Shortner = () => {
               customAlias,
               topic
             }
-            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body, { withCredentials: true });
-
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body, { withCredentials: true});
             // console.log("fe request completed");
             getShortInfos();
         } catch (e) {
