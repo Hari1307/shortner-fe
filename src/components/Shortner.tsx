@@ -5,9 +5,7 @@ import Input from "./Input";
 
 
 const Shortner = () => {
-    const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
-    // const [isAuthenticated, setIsAuthenticated] = useState(false);
-    // const [loading, setLoading] = useState(true);
+    const [shortUrlInfo, setShortUrlInfo] = useState([]);
     const fullUrlRef = useRef<HTMLInputElement>(null);
     const customAliasRef = useRef<HTMLInputElement>(null);
     const topicRef = useRef<HTMLInputElement>(null);
@@ -59,22 +57,23 @@ const Shortner = () => {
             const fullUrl = fullUrlRef.current?.value;
             const customAlias = customAliasRef.current?.value;
             const topic = topicRef.current?.value;
+            const body = {
+              fullUrl,
+              customAlias,
+              topic
+            }
+            await axios.post(`${BACKEND_URL}/api/shorten`, body, { withCredentials: true });
 
-            await axios.post(`${BACKEND_URL}/api/shorten`, {
-                fullUrl,
-                customAlias,
-                topic
-            }, { withCredentials: true });
-
+            console.log("fe request completed");
             getShortInfos();
         } catch (e) {
             console.error("Failed to create short URL:", e);
         }
     };
   
-  useEffect(() => {
-    getShortInfos();
-  },[])
+    useEffect(() => {
+      getShortInfos();
+    },[])
 
     return (
         <div className="flex w-screen h-screen justify-around items-center bg-slate-300">
@@ -86,7 +85,7 @@ const Shortner = () => {
                 <button className="p-7 m-3 rounded-md w-96 bg-slate-200" onClick={createShortner}>Create ShortURL</button>
         </div>
         
-        {/* {JSON.stringify(user)} */}
+        {JSON.stringify(shortUrlInfo)}
             <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full bg-white border border-gray-200 shadow-md">
                     <thead className="bg-gray-200">
