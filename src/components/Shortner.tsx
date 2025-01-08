@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../config";
 import Input from "./Input";
 
 
-const Shortner:React.FC<{user:any}> = ({user}) => {
+const Shortner = () => {
     const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
     // const [isAuthenticated, setIsAuthenticated] = useState(false);
     // const [loading, setLoading] = useState(true);
@@ -86,7 +86,7 @@ const Shortner:React.FC<{user:any}> = ({user}) => {
                 <button className="p-7 m-3 rounded-md w-96 bg-slate-200" onClick={createShortner}>Create ShortURL</button>
         </div>
         
-        {JSON.stringify(user)}
+        {/* {JSON.stringify(user)} */}
             <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full bg-white border border-gray-200 shadow-md">
                     <thead className="bg-gray-200">
