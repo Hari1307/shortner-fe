@@ -16,7 +16,9 @@ const Shortner = () => {
             setShortUrlInfo(response.data);
             console.log(response.data);
         } catch (error) {
-            console.error("Error fetching short URLs:", error);
+            if (error.response && error.response.status === 401) {
+                window.location.href = error.response.data.redirectUrl;
+            }
         }
     };
 
@@ -32,8 +34,10 @@ const Shortner = () => {
             }
             await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body);
             getShortInfos();
-        } catch (e) {
-            console.error("Failed to create short URL:", e);
+        } catch (error) {
+if (error.response && error.response.status === 401) {
+                window.location.href = error.response.data.redirectUrl;
+            }
         }
     };
   
