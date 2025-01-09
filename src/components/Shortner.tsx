@@ -12,12 +12,13 @@ const Shortner = () => {
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
                 method: 'GET',
-                credentials: 'include', // This is equivalent to withCredentials: true
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            setShortUrlInfo(response.json());
+            const data = await response.json();
+            setShortUrlInfo(data);
         } catch (error) {
             console.error("Error fetching short URLs:", error);
         }
@@ -37,7 +38,7 @@ const Shortner = () => {
             
             await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
                 method: 'POST',
-                credentials: 'include', // This is equivalent to withCredentials: true
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
