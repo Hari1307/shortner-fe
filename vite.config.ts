@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/url": {
-        target: import.meta.env.VITE_BACKEND_URL
+        target: "https://shortner-app.onrender.com"
       }
     }
   }
