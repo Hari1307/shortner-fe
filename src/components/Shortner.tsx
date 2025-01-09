@@ -1,18 +1,23 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 
 
 const Shortner = () => {
-    const [shortUrlInfo, setShortUrlInfo] = useState([]);
+    const [shortUrlInfo, setShortUrlInfo] = useState<any>([]);
     const fullUrlRef = useRef<HTMLInputElement>(null);
     const customAliasRef = useRef<HTMLInputElement>(null);
     const topicRef = useRef<HTMLInputElement>(null);
 
     const getShortInfos = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, { withCredentials: true });
-            setShortUrlInfo(response.data);
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
+                method: 'GET',
+                credentials: 'include', // This is equivalent to withCredentials: true
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            setShortUrlInfo(response.json());
         } catch (error) {
             console.error("Error fetching short URLs:", error);
         }
@@ -28,7 +33,17 @@ const Shortner = () => {
               customAlias,
               topic
             }
-            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body, { withCredentials: true});
+            // await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body, { withCredentials: true });
+            
+            await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
+                method: 'POST',
+                credentials: 'include', // This is equivalent to withCredentials: true
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify(body)
+            });
+
             // console.log("fe request completed");
             getShortInfos();
         } catch (e) {
