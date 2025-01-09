@@ -11,6 +11,7 @@ const Shortner = () => {
     const getShortInfos = async () => {
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
+                mode:"cors",
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -37,6 +38,7 @@ const Shortner = () => {
             // await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body, { withCredentials: true });
             
             await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
+                mode:"cors",
                 method: 'POST',
                 credentials: 'include',
                 headers: {
