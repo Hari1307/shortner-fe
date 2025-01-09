@@ -15,7 +15,7 @@ const Shortner = () => {
             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`);
             setShortUrlInfo(response.data);
             console.log(response.data);
-        } catch (error) {
+        } catch (error:any) {
             if (error.response && error.response.status === 401) {
                 window.location.href = error.response.data.redirectUrl;
             }
@@ -34,9 +34,9 @@ const Shortner = () => {
             }
             await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body);
             getShortInfos();
-        } catch (error) {
-if (error.response && error.response.status === 401) {
-                window.location.href = error.response.data.redirectUrl;
+        } catch (e:any) {
+            if (e.response && e.response.status === 401) {
+                window.location.href = e.response.data.redirectUrl;
             }
         }
     };
