@@ -18,7 +18,7 @@ const Shortner = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            const data = await response.json();
+            const data = response.json();
             setShortUrlInfo(data);
         } catch (error) {
             console.error("Error fetching short URLs:", error);
