@@ -6,8 +6,15 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/url": {
-        target: "https://shortner-app.onrender.com"
+      '/auth': {
+        target: 'https://shortner-app.onrender.com',  
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/auth/, '/auth'),
+      },
+      '/api': {
+        target: 'https://shortner-app.onrender.com',  
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
       }
     }
   }
