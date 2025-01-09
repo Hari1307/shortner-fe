@@ -9,20 +9,20 @@ const Shortner = () => {
     const topicRef = useRef<HTMLInputElement>(null);
 
     const getShortInfos = async () => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
-                // mode:"no-cors",
+        // try {
+            const response = fetch(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            });
-            const data = response.json();
-            setShortUrlInfo(data);
-        } catch (error) {
-            console.error("Error fetching short URLs:", error);
-        }
+            }).then(response => response.json())
+                .catch(error => console.error("Error fetching short URLs:", error));
+
+            setShortUrlInfo(response);
+        // } catch (error) {
+        //     console.error("Error fetching short URLs:", error);
+        // }
     };
 
   const createShortner = async () => {
