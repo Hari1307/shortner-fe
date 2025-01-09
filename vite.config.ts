@@ -9,11 +9,13 @@ export default defineConfig({
       '/auth': {
         target: 'https://shortner-app.onrender.com',  
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/auth/, '/auth'),
+        secure:true,
+        // rewrite: (path) => path.replace(/^\/auth/, '/auth'),
       },
       '/api': {
         target: 'https://shortner-app.onrender.com',  
         changeOrigin: true,
+        secure:true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       }
     }

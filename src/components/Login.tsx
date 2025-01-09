@@ -1,7 +1,7 @@
 
 const Login = () => {
   const handleGoogleLogin = () => {
-    window.location.href = `/auth/google`;
+    window.location.assign("/auth/google");
   }
   return (
     <div className='flex w-screen h-screen justify-around items-center bg-slate-300'>
