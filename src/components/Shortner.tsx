@@ -11,7 +11,7 @@ const Shortner = () => {
 
     const getShortInfos = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, { withCredentials: true });
+            const response = await axios.get(`/url/api/shorten`, { withCredentials: true });
             setShortUrlInfo(response.data);
         } catch (error) {
             console.error("Error fetching short URLs:", error);
@@ -28,7 +28,7 @@ const Shortner = () => {
               customAlias,
               topic
             }
-            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/shorten`, body, { withCredentials: true});
+            await axios.post(`/url/api/shorten`, body, { withCredentials: true});
             // console.log("fe request completed");
             getShortInfos();
         } catch (e) {

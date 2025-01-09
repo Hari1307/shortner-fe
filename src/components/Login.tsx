@@ -1,7 +1,7 @@
 
 const Login = () => {
   const handleGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/auth/google`;
+    window.location.href = `/url/auth/google`;
   }
   return (
     <div className='flex w-screen h-screen justify-around items-center bg-slate-300'>
